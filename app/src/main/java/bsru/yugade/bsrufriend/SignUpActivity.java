@@ -15,6 +15,7 @@ public class SignUpActivity extends AppCompatActivity {
     private ImageView imageView;
     private RadioGroup radioGroup;
     private Button button;
+    private String nameString, userString, passString;
 
 
     @Override
@@ -25,8 +26,8 @@ public class SignUpActivity extends AppCompatActivity {
         //Bind Widget
         bindWidget();
 
-        //Button Controllr
-        buttonController()
+        //Button Controller
+        buttonController();
 
 
 
@@ -37,6 +38,18 @@ public class SignUpActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //get value from edit text
+                nameString = nameEditText.getText().toString().trim();
+                userString = userEditText.getText().toString().trim();
+                passString = passEditText.getText().toString().trim();
+
+                //check space
+                if (nameString.equals("") || userString.equals("") || passString.equals("")) {
+                    //true ==> have space
+                    MyAlert myAlert = new MyAlert(SignUpActivity.this);
+                    myAlert.myDialog("มีช่องว่าง","กรุณากรอกให้ครบทุกช่องค่ะ");
+                }
 
             }   //onClick
         });
