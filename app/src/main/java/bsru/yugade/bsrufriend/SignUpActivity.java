@@ -1,7 +1,14 @@
 package bsru.yugade.bsrufriend;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +22,10 @@ public class SignUpActivity extends AppCompatActivity {
     private ImageView imageView;
     private RadioGroup radioGroup;
     private Button button;
-    private String nameString, userString, passString;
+    private String nameString, userString, passString, pathImageString, nameImageString;
+    private Uri uri;
+    private boolean aBoolean = true;
+
 
 
     @Override
@@ -29,9 +39,64 @@ public class SignUpActivity extends AppCompatActivity {
         //Button Controller
         buttonController();
 
-
+        //image controller
+        imageController();
 
     }   //Main Method
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+
+            aBoolean = false;
+            uri = data.getData();
+            //Setup Image Choose to ImageView
+            try {
+
+                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+                imageView.setImageBitmap(bitmap);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+
+            //Find path of image choose
+            String[] strings = new String[]{MediaStore.Images.Media.DATA};
+            Cursor cursor = getContentResolver().query(uri, strings, null, null, null);
+
+            if (cursor != null) {
+
+                cursor.moveToFirst();
+                int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                pathImageString = cursor.getString(index);
+            } else {
+                pathImageString = uri.getPath();
+            }
+
+            Log.d("10febV1", "pathImage ==> " + pathImageString);
+
+
+        }   //if
+
+
+    }   //onActivityResult
+
+    private void imageController() {
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "โปรดเลือกแอพดูภาพ"), 1);
+
+
+
+            }   //onChlick
+        });
+    }
 
     private void buttonController() {
 
@@ -48,7 +113,14 @@ public class SignUpActivity extends AppCompatActivity {
                 if (nameString.equals("") || userString.equals("") || passString.equals("")) {
                     //true ==> have space
                     MyAlert myAlert = new MyAlert(SignUpActivity.this);
-                    myAlert.myDialog("มีช่องว่าง","กรุณากรอกให้ครบทุกช่องค่ะ");
+                    myAlert.myDialog("มีช่องว่าง", "กรุณากรอกให้ครบทุกช่องค่ะ");
+                } else if (aBoolean) {
+                    //Non Choose Image
+                    MyAlert myAlert = new MyAlert(SignUpActivity.this);
+                    myAlert.myDialog("ยังไม่เลือกรูปภาพ", "กรุณาเลือกรูปภาพสิคะ");
+
+                } else {
+                 //EveryThing OK
                 }
 
             }   //onClick
@@ -60,8 +132,8 @@ public class SignUpActivity extends AppCompatActivity {
     private void bindWidget() {
 
         nameEditText = (EditText) findViewById(R.id.editText3);
-        nameEditText = (EditText) findViewById(R.id.editText4);
-        nameEditText = (EditText) findViewById(R.id.editText5);
+        userEditText = (EditText) findViewById(R.id.editText4);
+        passEditText = (EditText) findViewById(R.id.editText5);
         imageView = (ImageView) findViewById(R.id.imageView4);
         radioGroup = (RadioGroup) findViewById(R.id.ragAvata);
         button = (Button) findViewById(R.id.button3);
