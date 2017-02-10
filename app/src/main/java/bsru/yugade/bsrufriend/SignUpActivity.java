@@ -183,9 +183,36 @@ public class SignUpActivity extends AppCompatActivity {
             simpleFTP.stor(new File(pathImageString));
             simpleFTP.disconnect();
 
+            //upload text
+            String tag = "10febV2";
+            Log.d(tag, "Name ==>" + nameString);
+            Log.d(tag, "User ==>" + userString);
+            Log.d(tag, "Password ==>" + passString);
+
+            nameImageString = "http://swiftcodingthai.com/bsru/Image_yugaze" + pathImageString.substring(pathImageString.lastIndexOf("/"));
+            Log.d(tag, "Image ==> " + nameImageString);
+            Log.d(tag, "Avata ==> " + anInt);
+
+            AddValueToUser addValueToUser = new AddValueToUser(SignUpActivity.this,
+                    nameString, userString, passString, nameImageString,
+                    Integer.toString(anInt));
+            addValueToUser.execute("http://swiftcodingthai.com/bsru/add_yugaze.php");
+            String s = addValueToUser.get();
+            Log.d(tag, "Result ==> " + s);
+
+            if (Boolean.parseBoolean(s)) {
+                finish();
+            } else {
+                MyAlert myAlert = new MyAlert(SignUpActivity.this);
+                myAlert.myDialog("Cannot Upload", "Upload False");
+            }
+
+
+
         } catch (Exception e) {
             Log.d("10febV1", "e upload ==>" + e.toString());
         }
+
 
     }   //upload
 
