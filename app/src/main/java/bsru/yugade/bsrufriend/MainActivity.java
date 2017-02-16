@@ -12,6 +12,8 @@ public class MainActivity extends AppCompatActivity {
     // Explicit การประกาศตัวแปร
     private Button signInButton, signUpButton;
     private EditText userEditText, passEditText;
+    private String userString, passString;
+    private String[] loginStrings;
 
         @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,24 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+         signInButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 //Check space and get value from edit text
+                 userString = userEditText.getText().toString().trim();
+                 passString = passEditText.getText().toString().trim();
+                 if (userString.equals("") || passString.equals("")) {
+                     //have space
+                     MyAlert myAlert = new MyAlert(MainActivity.this);
+                     myAlert.myDialog("มีช่องว่าง","กรุณากรอกทุกให้ครบทุกช่องคะ");
+                 } else {
+                     //no space
+                 }
+
+             }  //onClick
+         });
 
 
 

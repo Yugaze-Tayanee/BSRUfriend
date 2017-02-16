@@ -196,7 +196,7 @@ public class SignUpActivity extends AppCompatActivity {
             AddValueToUser addValueToUser = new AddValueToUser(SignUpActivity.this,
                     nameString, userString, passString, nameImageString,
                     Integer.toString(anInt));
-            addValueToUser.execute("http://swiftcodingthai.com/bsru/add_yugaze.php");
+            addValueToUser.execute("http://swiftcodingthai.com/bsru/add_master.php");
             String s = addValueToUser.get();
             Log.d(tag, "Result ==> " + s);
 
