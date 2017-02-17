@@ -1,8 +1,11 @@
 package bsru.yugade.bsrufriend;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -26,10 +29,10 @@ public class ListFriend extends AppCompatActivity {
             String strJSON = getUser.get();
 
             JSONArray jsonArray = new JSONArray(strJSON);
-            String[] nameStrings = new String[jsonArray.length()];
-            String[] imageStings = new String[jsonArray.length()];
-            String[] latStrings = new String[jsonArray.length()];
-            String[] lngStrings = new String[jsonArray.length()];
+            final String[] nameStrings = new String[jsonArray.length()];
+            final String[] imageStings = new String[jsonArray.length()];
+            final String[] latStrings = new String[jsonArray.length()];
+            final String[] lngStrings = new String[jsonArray.length()];
 
             for (int i=0;i<jsonArray.length();i++) {
 
@@ -44,6 +47,20 @@ public class ListFriend extends AppCompatActivity {
 
             FriendAdapter friendAdapter = new FriendAdapter(ListFriend.this, imageStings, nameStrings);
             listView.setAdapter(friendAdapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    Intent intent = new Intent(ListFriend.this, Detiailfriend.class);
+                    intent.putExtra("Name", nameStrings[position]);
+                    intent.putExtra("Image", imageStings[position]);
+                    intent.putExtra("lat", latStrings[position]);
+                    intent.putExtra("lng", lngStrings[position]);
+                    startActivity(intent);
+
+                }
+            });
 
         } catch (Exception e) {
             Log.d("17febV3", "e ListView ==> " + e.toString());
