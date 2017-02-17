@@ -1,6 +1,7 @@
 package bsru.yugade.bsrufriend;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -11,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -70,6 +72,19 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         //My Loop
         myLoop();
 
+        //Button Controller
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                aBoolean = false;
+                Intent intent = new Intent(ServiceActivity.this, ListFriend.class);
+                intent.putExtra("Login", loginStrings);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
     }   //  Main Method
 
     private void myLoop() {
@@ -98,6 +113,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
 
     }   // myLoop
 
+
     private void createMarker() {
 
         try {
@@ -119,8 +135,11 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                         Double.parseDouble(jsonObject.getString("Lng")));
                 mMap.addMarker(new MarkerOptions()
                         .position(latLng)
-                .icon(BitmapDescriptorFactory.fromResource(avataInts[Integer.parseInt(jsonObject.getString("Avata"))])));
+                .icon(BitmapDescriptorFactory.fromResource(avataInts[Integer.parseInt(jsonObject.getString("Avata"))]))
+                .title(jsonObject.getString("Name")));
             }   //for
+
+            getUser.cancel(true);
 
 
         } catch (Exception e) {
@@ -137,6 +156,8 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
             editLatLng.execute(Double.toString(userLatADouble), Double.toString(userLngADouble));
             boolean b = Boolean.parseBoolean(editLatLng.get());
             Log.d("17febV2", "Result ==> " + b);
+
+            editLatLng.cancel(true);
 
         } catch (Exception e) {
             Log.d("17febV2", "e update ==> " + e.toString());
